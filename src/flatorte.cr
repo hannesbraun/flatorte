@@ -114,18 +114,20 @@ server = HTTP::Server.new do |context|
   ics = String.build do |str|
     str << "BEGIN:VCALENDAR\n"
     str << "VERSION:2.0\n"
+    str << "PRODID:-//HANNESBRAUN//FLATORTE #{VERSION}\n"
     str << "CALSCALE:GREGORIAN\n"
 
     cache[course.upcase][0].each do |lesson|
       str << "BEGIN:VEVENT\n"
       unless lesson.subject.empty?
-        str << "SUMMARY:#{lesson.subject}\n"
+        str << "SUMMARY:#{lesson.subject[...65]}\n"
       end
       unless lesson.room.empty?
-        str << "LOCATION:#{lesson.room}\n"
+        str << "LOCATION:#{lesson.room[...64]}\n"
       end
-      str << "DTSTART;TZID=Europe/Berlin:#{lesson.dstart.to_s("%Y%m%d%H%M%S")}\n"
-      str << "DTEND;TZID=Europe/Berlin:#{lesson.dend.to_s("%Y%m%d%H%M%S")}\n"
+      str << "DTSTART;TZID=Europe/Berlin:#{lesson.dstart.to_s("%Y%m%dT%H%M%S")}\n"
+      str << "DTEND;TZID=Europe/Berlin:#{lesson.dend.to_s("%Y%m%dT%H%M%S")}\n"
+      str << "DESCRIPTION:#{lesson.remark[...61]}\n" # TODO allow multiple lines of descriptions
       str << "END:VEVENT\n"
     end
 
