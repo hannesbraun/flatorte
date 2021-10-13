@@ -1,0 +1,11 @@
+name: flatorte
+version: 0.1.0
+
+authors:
+  - Hannes Braun <hannesbraun@mail.de>
+
+targets:
+  flatorte:
+    main: src/flatorte.cr
+
+crystal: 1.1.1
