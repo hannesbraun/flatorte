@@ -1,7 +1,5 @@
 require "./hs"
-
-# TCOR_API = "https://tcor.mosad.xyz"
-TCOR_API = "http://localhost:8080"
+require "./tcor"
 
 FUTURE_WEEKS = 19
 
@@ -57,33 +55,20 @@ def icalendar(course, future_weeks = FUTURE_WEEKS)
 end
 
 def ask_tcor(course, week_index, channel)
-  tcor_url = "#{TCOR_API}/timetable?course=#{course}&week=#{week_index}"
-  timetable = JSON.parse(HTTP::Client.get(tcor_url).body)
-  week = timetable["meta"]["weekNumberYear"].as_i
-
   beginning_of_week = Time.local(Time::Location.load("Europe/Berlin")).at_beginning_of_week + Time::Span.new(days: week_index * 7)
   faculty = course_to_faculty(course)
-  timetable["timetable"]["days"].as_a.each do |day|
-    timeslots = day["timeslots"]
-    timeslots.as_a.each do |timeslot|
-      timeslot.as_a.each do |lesson|
-        subject = lesson["lessonSubject"].as_s.strip
-        room = lesson["lessonRoom"].as_s.strip
-        remark = lesson["lessonRemark"].as_s.strip
-        id = lesson["lessonID"].as_s.split('.')
 
-        if subject.empty? && room.empty? && remark.empty?
-          # Empty slot
-          next
-        end
-
-        day = id[0].to_i
-        time = id_to_time(id[1].to_i, faculty)
-        dstart = beginning_of_week + Time::Span.new(days: day, hours: time[0], minutes: time[1])
-        dend = dstart + Time::Span.new(hours: 1, minutes: 30)
-        channel.send(Lesson.new(subject, room, dstart, dend, remark)) # TODO does not work
-      end
+  timetable(course, week_index) do |data|
+    if data.subject.empty? && data.room.empty? && data.remark.empty?
+      # Empty slot
+      next
     end
+
+    day = data.id[0].to_i
+    time = id_to_time(data.id[1].to_i, faculty)
+    dstart = beginning_of_week + Time::Span.new(days: day, hours: time[0], minutes: time[1])
+    dend = dstart + Time::Span.new(hours: 1, minutes: 30)
+    channel.send(Lesson.new(data.subject, data.room, dstart, dend, data.remark)) # TODO does not work
   end
 
   channel.close
