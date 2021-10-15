@@ -27,7 +27,7 @@ class Cache
 
     if cache_entry == nil
       # Cache miss
-      entry = icalendar(course)
+      entry = icalendar(course, 2)
       if entry != nil
         @mutex.lock
         @cache[course] = CacheEntry.new(entry.as(String))

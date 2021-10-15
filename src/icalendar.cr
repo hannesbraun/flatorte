@@ -12,10 +12,10 @@ struct Lesson
   end
 end
 
-def icalendar(course)
+def icalendar(course, future_weeks = FUTURE_WEEKS)
   channels = Array(Channel(Lesson)).new(FUTURE_WEEKS)
 
-  (0...FUTURE_WEEKS).each do |week_index|
+  (0...future_weeks).each do |week_index|
     channel = Channel(Lesson).new(36)
     channels << channel
     spawn do
