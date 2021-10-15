@@ -8,9 +8,9 @@ require "time"
 
 VERSION = "0.1.0"
 
-puts "Flatorte #{VERSION}"
-puts "Copyright 2021 Hannes Braun"
-puts "Powered by the citadel of Ricks"
+puts "Flatorte #{VERSION} // Copyright (C) 2021 Hannes Braun"
+puts "Flatorte is powered by TheCitadelofRicks (made by Jannik aka Seil0)."
+puts
 
 cache = Cache.new
 

@@ -4,11 +4,11 @@ def handle_request(context, cache)
   resource = URI.parse(context.request.resource).path
   if resource == "/"
     context.response.content_type = "text/plain"
-    context.response.print "Flatorte #{VERSION}  Copyright (C) 2021  Hannes Braun\n"
+    context.response.print "Flatorte #{VERSION} // Copyright (C) 2021 Hannes Braun\n"
     context.response.print "This program comes with ABSOLUTELY NO WARRANTY.\n"
     context.response.print "This is free software, and you are welcome to redistribute it\n"
     context.response.print "under certain conditions.\n\n"
-    # TODO Mention TCoR
+    context.response.print "This service is powered by TheCitadelofRicks (made by Jannik aka Seil0).\n"
     return
   end
 
