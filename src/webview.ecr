@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <title>Flatorte</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        .wrap {
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Flatorte</h1>
+        <h3><i>Vorlesungspläne via Webcal</i></h2>
+    </header>
+    <hr>
+    <main class="wrap">
+        <%- @courses.each do |course| -%>
+        <%= course %>: <a href="webcal://flatorte.hannesbraun.one/calendar/<%= URI.encode_path course %>">webcal://flatorte.hannesbraun.one/calendar/<%= URI.encode_path course %></a>
+        <br>
+        <%- end -%>
+    </main>
+    <hr>
+    <footer>
+        <i>
+            <a href="https://github.com/hannesbraun/flatorte">Flatorte</a> <%= VERSION %> // Copyright (C) 2021 Hannes Braun
+            <br>
+            This service is powered by <a href="https://git.mosad.xyz/Seil0/TheCitadelofRicks">TheCitadelofRicks</a>
+            (made by Jannik aka Seil0).
+        </i>
+    </footer>
+</body>
+
+</html>

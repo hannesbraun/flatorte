@@ -32,3 +32,10 @@ def timetable(course, week_index)
   end
 end
 
+def courseList
+  tcor_url = "#{TCOR_API}/courseList"
+  list = JSON.parse(HTTP::Client.get(tcor_url).body)
+  result = Array(String).new(list["meta"]["totalCourses"].as_i)
+  list["courses"].as_a.each { |course| result << course["courseName"].as_s }
+  return result
+end
