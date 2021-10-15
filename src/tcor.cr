@@ -1,3 +1,5 @@
+require "uri"
+
 # TCOR_API = "https://tcor.mosad.xyz"
 TCOR_API = "http://localhost:8080"
 
@@ -9,7 +11,7 @@ struct LessonRaw
 end
 
 def timetable(course, week_index)
-  tcor_url = "#{TCOR_API}/timetable?course=#{course}&week=#{week_index}"
+  tcor_url = "#{TCOR_API}/timetable?course=#{URI.encode_path(course)}&week=#{week_index}"
   timetable = JSON.parse(HTTP::Client.get(tcor_url).body)
   week = timetable["meta"]["weekNumberYear"].as_i
 

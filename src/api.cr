@@ -1,7 +1,8 @@
+require "uri"
 require "./icalendar"
 
 def handle_request(context, cache)
-  resource = URI.parse(context.request.resource).path
+  resource = URI.decode(URI.parse(context.request.resource).path)
   if resource == "/"
     context.response.content_type = "text/plain"
     context.response.print "Flatorte #{VERSION} // Copyright (C) 2021 Hannes Braun\n"
@@ -18,7 +19,7 @@ def handle_request(context, cache)
     return
   end
 
-  course_regex = /^\/calendar\/(\w+)\/?$/
+  course_regex = /^\/calendar\/([^\/?&=]+)\/?$/
   regex_match = course_regex.match(resource)
   if regex_match != nil
     course = (regex_match.try &.[1]).as(String)
