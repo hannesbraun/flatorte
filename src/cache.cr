@@ -1,3 +1,5 @@
+require "time"
+
 # This is a blatant copy of the TCoR caching mechanism (almost) ;)
 # But it works, it fits and I like it
 

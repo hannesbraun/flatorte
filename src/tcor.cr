@@ -1,3 +1,5 @@
+require "http/client"
+require "json"
 require "uri"
 
 # TCOR_API = "https://tcor.mosad.xyz"

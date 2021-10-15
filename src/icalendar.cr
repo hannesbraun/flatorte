@@ -1,3 +1,5 @@
+require "channel"
+require "time"
 require "./hs"
 require "./tcor"
 

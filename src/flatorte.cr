@@ -1,10 +1,6 @@
-require "http/client"
 require "http/server"
 require "./api"
 require "./cache"
-require "hash"
-require "json"
-require "time"
 
 VERSION = "0.1.0"
 
