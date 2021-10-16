@@ -70,7 +70,7 @@ def ask_tcor(course, week_index, channel)
     time = id_to_time(data.id[1].to_i, faculty)
     dstart = beginning_of_week + Time::Span.new(days: day, hours: time[0], minutes: time[1])
     dend = dstart + Time::Span.new(hours: 1, minutes: 30)
-    channel.send(Lesson.new(data.subject, data.room, dstart, dend, data.remark)) # TODO does not work
+    channel.send(Lesson.new(data.subject, data.room, dstart, dend, data.remark))
   end
 
   channel.close
