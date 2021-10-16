@@ -25,6 +25,8 @@ class Cache
         @cache[course] = CacheEntry.new(calendar.as(String))
       end
     end
+
+    spawn scheduled_update
   end
 
   def get(course)
@@ -48,5 +50,37 @@ class Cache
     end
 
     result
+  end
+
+  private def calc_init_delay(period)
+    current_time = Time.local.to_unix
+    duration_1h = Time::Span.new(hours: 1).total_seconds
+    duration_1m = Time::Span.new(minutes: 1).total_seconds
+    (period - ((current_time + duration_1h) % period)) + duration_1m
+  end
+
+  def scheduled_update
+    duration_3h = Time::Span.new(hours: 3).total_seconds
+    init_delay_3h = calc_init_delay(duration_3h)
+
+    sleep init_delay_3h
+
+    loop do
+      # Update each cache entry
+      spawn do
+        @mutex.lock
+        @cache.each_key do |course|
+          calendar = icalendar(course)
+          if calendar != nil
+            @mutex.lock
+            @cache[course] = CacheEntry.new(calendar.as(String))
+            @mutex.unlock
+          end
+        end
+        @mutex.unlock
+      end
+
+      sleep duration_3h
+    end
   end
 end
