@@ -22,12 +22,12 @@ def handle_request(context, cache)
 
   course_regex = /^\/calendar\/([^\/?&=]+)\/?$/
   regex_match = course_regex.match(resource)
-  if regex_match != nil
-    course = (regex_match.try &.[1]).as(String)
+  if !regex_match.nil?
+    course = regex_match[1]
 
     context.response.content_type = "text/calendar"
     calendar = cache.get(course)
-    if calendar == nil
+    if calendar.nil?
       # Probably a wrong course name -> 404
       # If TCoR fails... future TODO to report that (maybe)
       context.response.status = HTTP::Status::NOT_FOUND

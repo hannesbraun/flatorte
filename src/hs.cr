@@ -56,8 +56,8 @@ end
 
 def course_to_faculty(course)
   regex_match = /^([a-zA-Z]+)/.match(course)
-  base_course = if regex_match != nil
-                  (regex_match.try &.[1]).as(String)
+  base_course = if !regex_match.nil?
+                  regex_match[1]
                 else
                   nil
                 end

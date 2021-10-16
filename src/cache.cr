@@ -21,8 +21,8 @@ class Cache
     # Load initial courses
     courses.each do |course|
       calendar = icalendar(course)
-      if calendar != nil
-        @cache[course] = CacheEntry.new(calendar.as(String))
+      if !calendar.nil?
+        @cache[course] = CacheEntry.new(calendar)
       end
     end
 
@@ -39,20 +39,20 @@ class Cache
       @mutex.unlock
     end
 
-    if cache_entry == nil
+    if cache_entry.nil?
       # Cache miss
       entry = icalendar(course, 2)
-      if entry != nil
+      if !entry.nil?
         begin
           @mutex.lock
-          @cache[course] = CacheEntry.new(entry.as(String))
+          @cache[course] = CacheEntry.new(entry)
         ensure
           @mutex.unlock
         end
         result = entry
       end
     else
-      result = cache_entry.as(CacheEntry).value
+      result = cache_entry.value
     end
 
     result
@@ -78,10 +78,10 @@ class Cache
           @mutex.lock
           @cache.each_key do |course|
             calendar = icalendar(course)
-            if calendar != nil
+            if !calendar.nil?
               begin
                 @mutex.lock
-                @cache[course] = CacheEntry.new(calendar.as(String))
+                @cache[course] = CacheEntry.new(calendar)
               ensure
                 @mutex.unlock
               end
