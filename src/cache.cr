@@ -32,17 +32,23 @@ class Cache
   def get(course)
     result = nil
 
-    @mutex.lock
-    cache_entry = @cache[course]?
-    @mutex.unlock
+    begin
+      @mutex.lock
+      cache_entry = @cache[course]?
+    ensure
+      @mutex.unlock
+    end
 
     if cache_entry == nil
       # Cache miss
       entry = icalendar(course, 2)
       if entry != nil
-        @mutex.lock
-        @cache[course] = CacheEntry.new(entry.as(String))
-        @mutex.unlock
+        begin
+          @mutex.lock
+          @cache[course] = CacheEntry.new(entry.as(String))
+        ensure
+          @mutex.unlock
+        end
         result = entry
       end
     else
@@ -68,16 +74,22 @@ class Cache
     loop do
       # Update each cache entry
       spawn do
-        @mutex.lock
-        @cache.each_key do |course|
-          calendar = icalendar(course)
-          if calendar != nil
-            @mutex.lock
-            @cache[course] = CacheEntry.new(calendar.as(String))
-            @mutex.unlock
+        begin
+          @mutex.lock
+          @cache.each_key do |course|
+            calendar = icalendar(course)
+            if calendar != nil
+              begin
+                @mutex.lock
+                @cache[course] = CacheEntry.new(calendar.as(String))
+              ensure
+                @mutex.unlock
+              end
+            end
           end
+        ensure
+          @mutex.unlock
         end
-        @mutex.unlock
       end
 
       sleep duration_3h
