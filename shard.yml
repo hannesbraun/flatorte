@@ -9,3 +9,5 @@ targets:
     main: src/flatorte.cr
 
 crystal: ">= 1.2.0"
+
+license: GPL-3.0-only
