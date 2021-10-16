@@ -13,11 +13,18 @@ class CacheEntry
 end
 
 class Cache
-  def initialize
+  def initialize(courses)
     # Cache for every course, containing a cache entry
     @cache = Hash(String, CacheEntry).new
     @mutex = Mutex.new
-    # TODO launch scheduled update
+
+    # Load initial courses
+    courses.each do |course|
+      calendar = icalendar(course)
+      if calendar != nil
+        @cache[course] = CacheEntry.new(calendar.as(String))
+      end
+    end
   end
 
   def get(course)
