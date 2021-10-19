@@ -18,8 +18,7 @@ require "http/client"
 require "json"
 require "uri"
 
-# TCOR_API = "https://tcor.mosad.xyz"
-TCOR_API = "http://localhost:8080"
+TCOR_API = "https://tcor.mosad.xyz"
 
 struct LessonRaw
   getter subject, room, remark, id
