@@ -21,9 +21,9 @@ require "uri"
 TCOR_API = "https://tcor.mosad.xyz"
 
 struct LessonRaw
-  getter subject, room, remark, id
+  getter subject, teacher, room, remark, id
 
-  def initialize(@subject : String, @room : String, @remark : String, @id : Array(String))
+  def initialize(@subject : String, @teacher : String, @room : String, @remark : String, @id : Array(String))
   end
 end
 
@@ -37,11 +37,12 @@ def timetable(course, week_index)
     timeslots.as_a.each do |timeslot|
       timeslot.as_a.each do |lesson|
         subject = lesson["lessonSubject"].as_s.strip
+        teacher = lesson["lessonTeacher"].as_s.strip
         room = lesson["lessonRoom"].as_s.strip
         remark = lesson["lessonRemark"].as_s.strip
         id = lesson["lessonID"].as_s.split('.')
 
-        yield LessonRaw.new(subject, room, remark, id)
+        yield LessonRaw.new(subject, teacher, room, remark, id)
       end
     end
   end

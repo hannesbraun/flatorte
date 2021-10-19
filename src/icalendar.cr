@@ -22,9 +22,9 @@ require "./tcor"
 FUTURE_WEEKS = 19
 
 struct Lesson
-  getter subject, room, dstart, dend, remark
+  getter subject, teacher, room, dstart, dend, remark
 
-  def initialize(@subject : String, @room : String, @dstart : Time, @dend : Time, @remark : String)
+  def initialize(@subject : String, @teacher : String, @room : String, @dstart : Time, @dend : Time, @remark : String)
   end
 end
 
@@ -86,7 +86,7 @@ def ask_tcor(course, week_index, channel)
     time = id_to_time(data.id[1].to_i, faculty)
     dstart = beginning_of_week + Time::Span.new(days: day, hours: time[0], minutes: time[1])
     dend = dstart + Time::Span.new(hours: 1, minutes: 30)
-    channel.send(Lesson.new(data.subject, data.room, dstart, dend, data.remark))
+    channel.send(Lesson.new(data.subject, data.teacher, data.room, dstart, dend, data.remark))
   end
 
   channel.close
@@ -95,14 +95,32 @@ end
 def encode_lesson(lesson, str)
   str << "BEGIN:VEVENT\n"
   unless lesson.subject.empty?
-    str << "SUMMARY:#{lesson.subject[...65]}\n"
+    str << encode_property("SUMMARY", lesson.subject)
+    str << "\n"
   end
   unless lesson.room.empty?
-    str << "LOCATION:#{lesson.room[...64]}\n"
+    str << encode_property("LOCATION", lesson.room)
+    str << "\n"
   end
   str << "DTSTART;TZID=Europe/Berlin:#{lesson.dstart.to_s("%Y%m%dT%H%M%S")}\n"
   str << "DTEND;TZID=Europe/Berlin:#{lesson.dend.to_s("%Y%m%dT%H%M%S")}\n"
-  # TODO teacher is missing
-  str << "DESCRIPTION:#{lesson.remark[...61]}\n" # TODO allow multiple lines of descriptions
+  str << encode_property("DESCRIPTION", "#{lesson.teacher}\n\n#{lesson.remark}".strip.gsub("\n", "\\n"))
+  str << "\n"
   str << "END:VEVENT\n"
+end
+
+def encode_property(key, value)
+  "#{key}:#{value}".split_after(74).join("\n ")
+end
+
+class String
+  def split_after(len : Int32)
+    result = [] of String
+    i = 0
+    while i < self.size
+      result << self[i, 75]
+      i += 75
+    end
+    return result
+  end
 end
