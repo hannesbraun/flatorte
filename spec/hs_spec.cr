@@ -16,10 +16,28 @@
 
 require "./spec_helper"
 
-describe Flatorte do
-  # TODO: Write tests
+describe "course_to_faculty" do
+  it "can handle imaginary courses" do
+    course_to_faculty("ABCD5").should eq(Faculty::EMI)
+  end
 
+  it "can handle INFM2" do
+    course_to_faculty("INFM2").should eq(Faculty::EMI)
+  end
+
+  it "can handle AI4" do
+    course_to_faculty("AI4").should eq(Faculty::EMI)
+  end
+
+  it "can handle AKI3" do
+    course_to_faculty("AKI3").should eq(Faculty::EMI)
+  end
+
+  # If you think other courses matter, add tests here
+end
+
+describe "id_to_time" do
   it "works" do
-    false.should eq(true)
+    id_to_time(0, Faculty::EMI).should eq({8, 0})
   end
 end

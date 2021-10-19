@@ -15,4 +15,4 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 require "spec"
-require "../src/flatorte"
+require "../src/hs"
