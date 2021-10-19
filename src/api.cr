@@ -14,12 +14,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+require "log"
 require "uri"
 require "./icalendar"
 require "./webview"
 
 def handle_request(context, cache)
   resource = URI.decode(URI.parse(context.request.resource).path)
+  Log.info { "Request: #{resource}" }
   if resource == "/"
     context.response.content_type = "text/plain"
     context.response.print "Flatorte #{VERSION} // Copyright (C) 2021 Hannes Braun\n"
