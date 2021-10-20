@@ -61,8 +61,8 @@ end
 if !key.nil? && !cert.nil?
   puts "Listening on https://127.0.0.1:7453"
   context = OpenSSL::SSL::Context::Server.new
-  context.certificate_chain = "cert.pem"
-  context.private_key = "key.pem"
+  context.certificate_chain = key
+  context.private_key = cert
   server.bind_tls "0.0.0.0", PORT, context
   server.listen
 else
