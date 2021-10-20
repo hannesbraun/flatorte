@@ -100,22 +100,28 @@ class Cache
     loop do
       # Update each cache entry
       spawn do
+        # Get list of courses
+        courses_list = Array(String).new
         begin
           @mutex.lock
           @cache.each_key do |course|
-            # Get updated iCalendar
-            calendar = icalendar(course, @meta)
-            if !calendar.nil?
-              begin
-                @mutex.lock
-                @cache[course] = CacheEntry.new(calendar)
-              ensure
-                @mutex.unlock
-              end
-            end
+            courses_list << course
           end
         ensure
           @mutex.unlock
+        end
+
+        # Get updated iCalendars
+        courses_list.each do |course|
+          calendar = icalendar(course, @meta)
+          if !calendar.nil?
+            begin
+              @mutex.lock
+              @cache[course] = CacheEntry.new(calendar)
+            ensure
+              @mutex.unlock
+            end
+          end
         end
       end
 
