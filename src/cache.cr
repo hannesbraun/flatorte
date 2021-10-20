@@ -46,6 +46,12 @@ class Cache
     spawn scheduled_update
   end
 
+  # Returns the timetable for the given course
+  #
+  # In most cases, this is a cache entry. If the cache doesn't contain the timetable,
+  # a request is going to be made to retrieve it. In that case, only the current and next week
+  # will be available until the cache updates itself for the next time. Then, the full timetable
+  # will be available.
   def get(course)
     result = nil
 
@@ -58,6 +64,7 @@ class Cache
 
     if cache_entry.nil?
       # Cache miss
+      # Only get the next two weeks for a fast response
       entry = icalendar(course, @meta, 2)
       if !entry.nil?
         begin
@@ -69,12 +76,14 @@ class Cache
         result = entry
       end
     else
+      # Cache hit
       result = cache_entry.value
     end
 
     result
   end
 
+  # Calculates the initial delay for the first scheduled update
   private def calc_init_delay(period)
     current_time = Time.local.to_unix
     duration_1h = Time::Span.new(hours: 1).total_seconds
@@ -94,6 +103,7 @@ class Cache
         begin
           @mutex.lock
           @cache.each_key do |course|
+            # Get updated iCalendar
             calendar = icalendar(course, @meta)
             if !calendar.nil?
               begin
@@ -109,6 +119,7 @@ class Cache
         end
       end
 
+      # Schedule next update
       sleep duration_3h
     end
   end

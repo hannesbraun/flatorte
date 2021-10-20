@@ -19,7 +19,9 @@ require "json"
 require "uri"
 
 TCOR_API = "https://tcor.mosad.xyz"
+# The TCoR URL to use
 
+# Raw string representation of one entry returned by TCoR
 struct LessonRaw
   getter subject, teacher, room, remark, id
 
@@ -27,6 +29,7 @@ struct LessonRaw
   end
 end
 
+# Requests the timetable for the given course and week
 def timetable(course, week_index)
   tcor_url = "#{TCOR_API}/timetable?course=#{URI.encode_path(course)}&week=#{week_index}"
   timetable = JSON.parse(HTTP::Client.get(tcor_url).body)
@@ -48,6 +51,7 @@ def timetable(course, week_index)
   end
 end
 
+# Requests the course list and returns it
 def courseList
   tcor_url = "#{TCOR_API}/courseList"
   list = JSON.parse(HTTP::Client.get(tcor_url).body)

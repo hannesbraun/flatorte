@@ -28,11 +28,13 @@ EMI_COURSES = ["AI", "AKI", "CME", "EI", "EP", "ES", "INFM", "MA", "ME", "MKA", 
 MV_COURSES  = ["BM", "BT", "MME", "MPE", "RED", "UT"]
 M_COURSES   = ["ENITS", "mgp", "MI", "MuK", "UN", "UV"]
 
+# Decides if we're currently in the winter semester
 def is_winter
   month = Time.local.month
   month >= 9 || month <= 2
 end
 
+# Maps the time id from TCoR to a time, represented as a tuple
 def id_to_time(id, faculty)
   case id
   when 0
@@ -70,6 +72,7 @@ def id_to_time(id, faculty)
   end
 end
 
+# Maps a course to its faculty that defines the timetable
 def course_to_faculty(course)
   regex_match = /^([a-zA-Z]+)/.match(course)
   base_course = if !regex_match.nil?
@@ -78,7 +81,7 @@ def course_to_faculty(course)
                   nil
                 end
 
-  if EMI_COURSES.any? { |c| c == base_course } # EMI first since for performance reasons
+  if EMI_COURSES.any? { |c| c == base_course } # EMI first for performance reasons
     Faculty::EMI
   elsif BW_COURSES.any? { |c| c == base_course }
     Faculty::BW

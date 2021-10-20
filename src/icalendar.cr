@@ -29,6 +29,9 @@ struct Lesson
   end
 end
 
+# Requests and builds the iCalendar from the given information
+#
+# If the calendar is empty, nil will be returned instead of an empty calendar
 def icalendar(course, meta, future_weeks = FUTURE_WEEKS)
   channels = Array(Channel(Lesson)).new(FUTURE_WEEKS)
 
@@ -118,6 +121,7 @@ def encode_property(key, value)
 end
 
 class String
+  # Splits the string into segments with a maximum of `len` characters
   def split_after(len : Int32)
     result = [] of String
     i = 0

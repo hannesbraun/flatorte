@@ -33,6 +33,7 @@ def handle_request(context, cache, meta)
   end
 
   if resource == "/calendar" || resource == "/calendar/"
+    # WebView
     context.response.content_type = "text/html"
     context.response.print WebView.new(meta).to_s
     return
@@ -48,7 +49,9 @@ def handle_request(context, cache, meta)
     if calendar.nil?
       # Probably a wrong course name -> 404
       # If TCoR fails... future TODO to report that (maybe)
+      context.response.content_type = "text/plain"
       context.response.status = HTTP::Status::NOT_FOUND
+      context.response.print "Error 404: #{resource} not found\n"
     else
       context.response.print calendar
     end
