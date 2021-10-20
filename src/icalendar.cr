@@ -16,6 +16,7 @@
 
 require "channel"
 require "time"
+require "uuid"
 require "./hs"
 require "./tcor"
 
@@ -44,10 +45,10 @@ def icalendar(course, future_weeks = FUTURE_WEEKS)
   end
 
   result = String.build do |str|
-    str << "BEGIN:VCALENDAR\n"
-    str << "VERSION:2.0\n"
-    str << "PRODID:-//HANNESBRAUN//FLATORTE #{VERSION}\n"
-    str << "CALSCALE:GREGORIAN\n"
+    str << "BEGIN:VCALENDAR\r\n"
+    str << "VERSION:2.0\r\n"
+    str << "PRODID:-//HANNESBRAUN//FLATORTE #{VERSION}\r\n"
+    str << "CALSCALE:GREGORIAN\r\n"
 
     channels.each do |channel|
       loop do
@@ -61,7 +62,7 @@ def icalendar(course, future_weeks = FUTURE_WEEKS)
       end
     end
 
-    str << "END:VCALENDAR\n"
+    str << "END:VCALENDAR"
   end
 
   if result.lines.size > 5
@@ -93,24 +94,27 @@ def ask_tcor(course, week_index, channel)
 end
 
 def encode_lesson(lesson, str)
-  str << "BEGIN:VEVENT\n"
+  str << "BEGIN:VEVENT\r\n"
   unless lesson.subject.empty?
     str << encode_property("SUMMARY", lesson.subject)
-    str << "\n"
+    str << "\r\n"
   end
   unless lesson.room.empty?
     str << encode_property("LOCATION", lesson.room)
-    str << "\n"
+    str << "\r\n"
   end
-  str << "DTSTART;TZID=Europe/Berlin:#{lesson.dstart.to_s("%Y%m%dT%H%M%S")}\n"
-  str << "DTEND;TZID=Europe/Berlin:#{lesson.dend.to_s("%Y%m%dT%H%M%S")}\n"
+  str << encode_property("UID", "#{UUID.random.to_s}@flatorte.hannesbraun.net")
+  str << "\r\n"
+  str << "DTSTAMP:#{Time.local(Time::Location.load("Europe/Berlin")).to_utc.to_s("%Y%m%dT%H%M%SZ")}\r\n"
+  str << "DTSTART:#{lesson.dstart.to_utc.to_s("%Y%m%dT%H%M%SZ")}\r\n"
+  str << "DTEND:#{lesson.dend.to_utc.to_s("%Y%m%dT%H%M%SZ")}\r\n"
   str << encode_property("DESCRIPTION", "#{lesson.teacher}\n\n#{lesson.remark}".strip.gsub("\n", "\\n"))
-  str << "\n"
-  str << "END:VEVENT\n"
+  str << "\r\n"
+  str << "END:VEVENT\r\n"
 end
 
 def encode_property(key, value)
-  "#{key}:#{value}".split_after(74).join("\n ")
+  "#{key}:#{value}".split_after(74).join("\r\n ")
 end
 
 class String
