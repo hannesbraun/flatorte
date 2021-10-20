@@ -87,8 +87,8 @@ class Cache
   private def calc_init_delay(period)
     current_time = Time.local.to_unix
     duration_1h = Time::Span.new(hours: 1).total_seconds
-    duration_1m = Time::Span.new(minutes: 1).total_seconds
-    (period - ((current_time + duration_1h) % period)) + duration_1m
+    duration_10m = Time::Span.new(minutes: 10).total_seconds
+    (period - ((current_time + duration_1h) % period)) + duration_10m
   end
 
   def scheduled_update
