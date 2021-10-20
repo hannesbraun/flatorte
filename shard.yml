@@ -1,13 +1,14 @@
 name: flatorte
 version: 0.1.0
 
+description: A WebCal server for courses at the Offenburg University
+repository: https://github.com/hannesbraun/flatorte
 authors:
   - Hannes Braun <hannesbraun@mail.de>
+license: GPL-3.0-only
+
+crystal: ">= 1.2.0"
 
 targets:
   flatorte:
     main: src/flatorte.cr
-
-crystal: ">= 1.2.0"
-
-license: GPL-3.0-only
