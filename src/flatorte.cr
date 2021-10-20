@@ -37,11 +37,11 @@ parser = OptionParser.new do |parser|
     _courses.split(",").each { |c| initial_courses << c }
   end
   parser.on("-k KEY", "--key KEY", "Path to private key file") do |_key|
-    parser.banner = "Usage: flatorte --init INFM1,INFM2"
+    parser.banner = "Usage: flatorte --key privkey.pem"
     key = _key
   end
   parser.on("-c CERTIFICATE", "--cert CERTIFICATE", "Path to the file containing the public certificate chain") do |_cert|
-    parser.banner = "Usage: flatorte --init INFM1,INFM2"
+    parser.banner = "Usage: flatorte --cert fullchain.pem"
     cert = _cert
   end
   parser.on("-h", "--help", "Show this help") do
