@@ -18,8 +18,8 @@ require "http/client"
 require "json"
 require "uri"
 
-TCOR_API = "https://tcor.mosad.xyz"
 # The TCoR URL to use
+TCOR_API = "https://tcor.mosad.xyz"
 
 # Raw string representation of one entry returned by TCoR
 struct LessonRaw
