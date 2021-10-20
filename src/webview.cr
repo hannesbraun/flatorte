@@ -15,12 +15,13 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 require "uri"
+require "./meta"
 require "./tcor"
 
 class WebView
   @courses : Array(String)
 
-  def initialize
+  def initialize(@meta : FlatorteMeta)
     @courses = begin
       courseList
     rescue

@@ -29,7 +29,7 @@ struct Lesson
   end
 end
 
-def icalendar(course, future_weeks = FUTURE_WEEKS)
+def icalendar(course, meta, future_weeks = FUTURE_WEEKS)
   channels = Array(Channel(Lesson)).new(FUTURE_WEEKS)
 
   (0...future_weeks).each do |week_index|
@@ -54,7 +54,7 @@ def icalendar(course, future_weeks = FUTURE_WEEKS)
       loop do
         begin
           lesson = channel.receive
-          encode_lesson(lesson, str)
+          encode_lesson(lesson, str, meta)
         rescue Channel::ClosedError
           # No more data to receive from this channel
           break
@@ -93,7 +93,7 @@ def ask_tcor(course, week_index, channel)
   channel.close
 end
 
-def encode_lesson(lesson, str)
+def encode_lesson(lesson, str, meta)
   str << "BEGIN:VEVENT\r\n"
   unless lesson.subject.empty?
     str << encode_property("SUMMARY", lesson.subject)
@@ -105,7 +105,7 @@ def encode_lesson(lesson, str)
   end
   str << encode_property("UID", "#{UUID.random.to_s}@flatorte.hannesbraun.net")
   str << "\r\n"
-  str << "DTSTAMP:#{Time.local(Time::Location.load("Europe/Berlin")).to_utc.to_s("%Y%m%dT%H%M%SZ")}\r\n"
+  str << "DTSTAMP:#{Time.local(Time::Location.load(meta.server_location)).to_utc.to_s("%Y%m%dT%H%M%SZ")}\r\n"
   str << "DTSTART:#{lesson.dstart.to_utc.to_s("%Y%m%dT%H%M%SZ")}\r\n"
   str << "DTEND:#{lesson.dend.to_utc.to_s("%Y%m%dT%H%M%SZ")}\r\n"
   str << encode_property("DESCRIPTION", "#{lesson.teacher}\n\n#{lesson.remark}".strip.gsub("\n", "\\n"))

@@ -19,7 +19,7 @@ require "uri"
 require "./icalendar"
 require "./webview"
 
-def handle_request(context, cache)
+def handle_request(context, cache, meta)
   resource = URI.decode(URI.parse(context.request.resource).path)
   Log.info { "Request: #{resource}" }
   if resource == "/"
@@ -34,7 +34,7 @@ def handle_request(context, cache)
 
   if resource == "/calendar" || resource == "/calendar/"
     context.response.content_type = "text/html"
-    context.response.print WebView.new.to_s
+    context.response.print WebView.new(meta).to_s
     return
   end
 

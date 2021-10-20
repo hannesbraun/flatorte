@@ -15,6 +15,7 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 require "time"
+require "./meta"
 
 # This is a blatant copy of the TCoR caching mechanism (almost) ;)
 # But it works, it fits and I like it
@@ -29,14 +30,14 @@ class CacheEntry
 end
 
 class Cache
-  def initialize(courses)
+  def initialize(courses, @meta : FlatorteMeta)
     # Cache for every course, containing a cache entry
     @cache = Hash(String, CacheEntry).new
     @mutex = Mutex.new
 
     # Load initial courses
     courses.each do |course|
-      calendar = icalendar(course)
+      calendar = icalendar(course, @meta)
       if !calendar.nil?
         @cache[course] = CacheEntry.new(calendar)
       end
@@ -57,7 +58,7 @@ class Cache
 
     if cache_entry.nil?
       # Cache miss
-      entry = icalendar(course, 2)
+      entry = icalendar(course, @meta, 2)
       if !entry.nil?
         begin
           @mutex.lock
@@ -93,7 +94,7 @@ class Cache
         begin
           @mutex.lock
           @cache.each_key do |course|
-            calendar = icalendar(course)
+            calendar = icalendar(course, @meta)
             if !calendar.nil?
               begin
                 @mutex.lock

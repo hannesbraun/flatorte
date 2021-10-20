@@ -18,10 +18,9 @@ require "http/server"
 require "option_parser"
 require "./api"
 require "./cache"
+require "./meta"
 
 VERSION = "0.1.0"
-
-PORT = 7453
 
 puts "Flatorte #{VERSION} // Copyright (C) 2021 Hannes Braun"
 puts "Flatorte is powered by TheCitadelofRicks (made by Jannik aka Seil0)."
@@ -30,6 +29,7 @@ puts
 initial_courses = Array(String).new
 key = nil
 cert = nil
+meta = FlatorteMeta.new
 parser = OptionParser.new do |parser|
   parser.banner = "Usage: flatorte [options]"
   parser.on("-i COURSES", "--init COURSES", "Initially load the given courses") do |_courses|
@@ -44,6 +44,18 @@ parser = OptionParser.new do |parser|
     parser.banner = "Usage: flatorte --cert fullchain.pem"
     cert = _cert
   end
+  parser.on("-u URL", "--url URL", "The domain under which to reach this server") do |_url|
+    parser.banner = "Usage: flatorte --url flatorte.yourdomain.dev"
+    meta.url = _url
+  end
+  parser.on("-p PORT", "--port PORT", "The port to use") do |_port|
+    parser.banner = "Usage: flatorte --port 7453"
+    meta.port = _port.to_i
+  end
+  parser.on("-t TIMEZONE", "--timezone TIMEZONE", "The timezone this server is located in") do |_tz|
+    parser.banner = "Usage: flatorte --timezone \"Europe/Berlin\""
+    meta.server_location = _tz
+  end
   parser.on("-h", "--help", "Show this help") do
     puts parser
     exit
@@ -52,21 +64,21 @@ end
 
 parser.parse
 
-cache = Cache.new(initial_courses)
+cache = Cache.new(initial_courses, meta)
 
 server = HTTP::Server.new do |context|
-  handle_request(context, cache)
+  handle_request(context, cache, meta)
 end
 
 if !key.nil? && !cert.nil?
-  puts "Listening on https://127.0.0.1:7453"
+  puts "Listening on https://127.0.0.1:#{meta.port}"
   context = OpenSSL::SSL::Context::Server.new
   context.certificate_chain = cert.as(String)
   context.private_key = key.as(String)
-  server.bind_tls "0.0.0.0", PORT, context
+  server.bind_tls "0.0.0.0", meta.port, context
   server.listen
 else
   # HTTPS disabled
-  puts "Listening on http://127.0.0.1:7453"
-  server.listen "0.0.0.0", PORT
+  puts "Listening on http://127.0.0.1:#{meta.port}"
+  server.listen "0.0.0.0", meta.port
 end

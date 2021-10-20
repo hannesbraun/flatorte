@@ -20,7 +20,7 @@
     <hr>
     <main class="wrap">
         <%- @courses.each do |course| -%>
-        <%= course %>: <a href="webcal://flatorte.hannesbraun.net:7453/calendar/<%= URI.encode_path course %>">webcal://flatorte.hannesbraun.net:7453/calendar/<%= URI.encode_path course %></a>
+        <%= course %>: <a href="webcal://<%= @meta.url %>:<%= @meta.port %>/calendar/<%= URI.encode_path course %>">webcal://<%= @meta.url %>:<%= @meta.port %>/calendar/<%= URI.encode_path course %></a>
         <br>
         <%- end -%>
     </main>
