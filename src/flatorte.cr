@@ -20,7 +20,7 @@ require "./api"
 require "./cache"
 require "./meta"
 
-VERSION = "0.1.0"
+VERSION = "1.0.0"
 
 puts "Flatorte #{VERSION} // Copyright (C) 2021 Hannes Braun"
 puts "Flatorte is powered by TheCitadelofRicks (made by Jannik aka Seil0)."
