@@ -33,6 +33,10 @@ describe "course_to_faculty" do
     course_to_faculty("AKI3").should eq(Faculty::EMI)
   end
 
+  it "can handle MW-plus 3" do
+    course_to_faculty("MW-plus 3").should eq(Faculty::M)
+  end
+
   # If you think other courses matter, add tests here
 end
 

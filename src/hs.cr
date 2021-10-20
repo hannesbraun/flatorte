@@ -26,7 +26,7 @@ end
 BW_COURSES  = ["BW", "BWM", "DEC", "DiW", "IBC", "LH", "WI", "WIN", "WINM", "WINp", "WP"]
 EMI_COURSES = ["AI", "AKI", "CME", "EI", "EP", "ES", "INFM", "MA", "ME", "MKA", "MK", "MT", "MTM", "startING"]
 MV_COURSES  = ["BM", "BT", "MME", "MPE", "RED", "UT"]
-M_COURSES   = ["ENITS", "mgp", "MI", "MuK", "UN", "UV"]
+M_COURSES   = ["ENITS", "mgp", "MI", "MuK", "MW", "UN", "UV"]
 
 # Decides if we're currently in the winter semester
 def is_winter
