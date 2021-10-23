@@ -53,6 +53,25 @@ def icalendar(course, meta, future_weeks = FUTURE_WEEKS)
     str << "PRODID:-//HANNESBRAUN//FLATORTE #{VERSION}\r\n"
     str << "CALSCALE:GREGORIAN\r\n"
 
+    str << "BEGIN:VTIMEZONE\r\n"
+    str << "TZID:Europe/Berlin\r\n"
+    str << "X-LIC-LOCATION:Europe/Berlin\r\n"
+    str << "BEGIN:DAYLIGHT\r\n"
+    str << "TZOFFSETFROM:+0100\r\n"
+    str << "TZOFFSETTO:+0200\r\n"
+    str << "TZNAME:CEST\r\n"
+    str << "DTSTART:19700329T020000\r\n"
+    str << "RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=3\r\n"
+    str << "END:DAYLIGHT\r\n"
+    str << "BEGIN:STANDARD\r\n"
+    str << "TZOFFSETFROM:+0200\r\n"
+    str << "TZOFFSETTO:+0100\r\n"
+    str << "TZNAME:CET\r\n"
+    str << "DTSTART:19701025T030000\r\n"
+    str << "RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=10\r\n"
+    str << "END:STANDARD\r\n"
+    str << "END:VTIMEZONE\r\n"
+
     channels.each do |channel|
       loop do
         begin
@@ -108,9 +127,9 @@ def encode_lesson(lesson, str, meta)
   end
   str << encode_property("UID", "#{UUID.random.to_s}@flatorte.hannesbraun.net")
   str << "\r\n"
-  str << "DTSTAMP:#{Time.local(Time::Location.load(meta.server_location)).to_utc.to_s("%Y%m%dT%H%M%SZ")}\r\n"
-  str << "DTSTART:#{lesson.dstart.to_utc.to_s("%Y%m%dT%H%M%SZ")}\r\n"
-  str << "DTEND:#{lesson.dend.to_utc.to_s("%Y%m%dT%H%M%SZ")}\r\n"
+  str << "DTSTAMP;TZID=Europe/Berlin:#{Time.local(Time::Location.load(meta.server_location)).to_s("%Y%m%dT%H%M%S")}\r\n"
+  str << "DTSTART;TZID=Europe/Berlin:#{lesson.dstart.to_s("%Y%m%dT%H%M%S")}\r\n"
+  str << "DTEND;TZID=Europe/Berlin:#{lesson.dend.to_s("%Y%m%dT%H%M%S")}\r\n"
   str << encode_property("DESCRIPTION", "#{lesson.teacher}\n\n#{lesson.remark}".strip.gsub("\n", "\\n"))
   str << "\r\n"
   str << "END:VEVENT\r\n"
