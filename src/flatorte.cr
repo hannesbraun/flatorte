@@ -15,6 +15,7 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 require "http/server"
+require "log"
 require "option_parser"
 require "./api"
 require "./cache"
@@ -71,7 +72,7 @@ server = HTTP::Server.new do |context|
 end
 
 if !key.nil? && !cert.nil?
-  puts "Listening on https://127.0.0.1:#{meta.port}"
+  Log.info { "Listening on https://127.0.0.1:#{meta.port}" }
   context = OpenSSL::SSL::Context::Server.new
   context.certificate_chain = cert.as(String)
   context.private_key = key.as(String)
@@ -79,6 +80,6 @@ if !key.nil? && !cert.nil?
   server.listen
 else
   # HTTPS disabled
-  puts "Listening on http://127.0.0.1:#{meta.port}"
+  Log.info { "Listening on http://127.0.0.1:#{meta.port}" }
   server.listen "0.0.0.0", meta.port
 end

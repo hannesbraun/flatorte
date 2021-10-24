@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+require "log"
 require "uri"
 require "./meta"
 require "./tcor"
@@ -24,7 +25,8 @@ class WebView
   def initialize(@meta : FlatorteMeta)
     @courses = begin
       courseList
-    rescue
+    rescue e
+      Log.error(exception: e) { "Error while retrieving courses from TCoR" }
       Array(String).new
     end
   end

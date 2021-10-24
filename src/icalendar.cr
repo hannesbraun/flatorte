@@ -15,6 +15,7 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 require "channel"
+require "log"
 require "time"
 require "uuid"
 require "./hs"
@@ -41,7 +42,8 @@ def icalendar(course, meta, future_weeks = FUTURE_WEEKS)
     spawn do
       begin
         ask_tcor(course, week_index, channel)
-      rescue
+      rescue e
+        Log.error(exception: e) { "Error while retrieving timetable from TCoR" }
         channel.close
       end
     end
