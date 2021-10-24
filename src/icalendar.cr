@@ -86,13 +86,6 @@ def icalendar(course, meta, future_weeks = FUTURE_WEEKS)
 
     str << "END:VCALENDAR"
   end
-
-  if result.lines.size > 5
-    result
-  else
-    # No events, only contains header and trailer lines
-    nil
-  end
 end
 
 def ask_tcor(course, week_index, channel)
