@@ -96,7 +96,6 @@ def icalendar(course, meta, future_weeks = FUTURE_WEEKS)
 end
 
 def ask_tcor(course, week_index, channel)
-  beginning_of_week = Time.local(Time::Location.load("Europe/Berlin")).at_beginning_of_week + Time::Span.new(days: week_index * 7)
   faculty = course_to_faculty(course)
 
   timetable(course, week_index) do |data|
@@ -107,6 +106,7 @@ def ask_tcor(course, week_index, channel)
 
     day = data.id[0].to_i
     time = id_to_time(data.id[1].to_i, faculty)
+    beginning_of_week = Time.week_date(data.year, data.week, Time::DayOfWeek::Monday)
     dstart = beginning_of_week + Time::Span.new(days: day, hours: time[0], minutes: time[1])
     dend = dstart + Time::Span.new(hours: 1, minutes: 30)
     channel.send(Lesson.new(data.subject, data.teacher, data.room, dstart, dend, data.remark))

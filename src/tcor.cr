@@ -23,9 +23,9 @@ TCOR_API = "https://tcor.mosad.xyz"
 
 # Raw string representation of one entry returned by TCoR
 struct LessonRaw
-  getter subject, teacher, room, remark, id
+  getter subject, teacher, room, remark, id, week, year
 
-  def initialize(@subject : String, @teacher : String, @room : String, @remark : String, @id : Array(String))
+  def initialize(@subject : String, @teacher : String, @room : String, @remark : String, @id : Array(String), @week : Int32, @year : Int32)
   end
 end
 
@@ -34,6 +34,7 @@ def timetable(course, week_index)
   tcor_url = "#{TCOR_API}/timetable?course=#{URI.encode_path(course)}&week=#{week_index}"
   timetable = JSON.parse(HTTP::Client.get(tcor_url).body)
   week = timetable["meta"]["weekNumberYear"].as_i
+  year = timetable["meta"]["year"].as_i
 
   timetable["timetable"]["days"].as_a.each do |day|
     timeslots = day["timeslots"]
@@ -45,7 +46,7 @@ def timetable(course, week_index)
         remark = lesson["lessonRemark"].as_s.strip
         id = lesson["lessonID"].as_s.split('.')
 
-        yield LessonRaw.new(subject, teacher, room, remark, id)
+        yield LessonRaw.new(subject, teacher, room, remark, id, week, year)
       end
     end
   end
