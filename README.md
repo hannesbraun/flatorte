@@ -7,6 +7,7 @@
 Requirements:
 - Crystal 1.2.0 (or later)
 - Shards
+- TheCitadelofRicks 1.3.0 (or later)
 
 Use the following to build Flatorte:
 ```bash

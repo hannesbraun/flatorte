@@ -1,5 +1,12 @@
 # Changelog
 
+1.0.2
+----------------------------------------
+* Fixed time offset issue
+* Timestamps for courses are now sent in timezone "Europe/Berlin"
+* Empty timetables will be cached now
+* Logging improvements
+
 1.0.1
 ----------------------------------------
 * Added MW-plus support
