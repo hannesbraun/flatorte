@@ -1,5 +1,5 @@
 # Flatorte - A WebCal server for courses at the Offenburg University
-# Copyright (C) 2021 Hannes Braun
+# Copyright (C) 2021-2022 Hannes Braun
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -21,9 +21,9 @@ require "./api"
 require "./cache"
 require "./meta"
 
-VERSION = "1.0.2"
+VERSION = "1.1.0"
 
-puts "Flatorte #{VERSION} // Copyright (C) 2021 Hannes Braun"
+puts "Flatorte #{VERSION} // Copyright (C) 2021-2022 Hannes Braun"
 puts "Flatorte is powered by TheCitadelofRicks (made by Jannik aka Seil0)."
 puts
 

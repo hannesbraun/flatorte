@@ -1,5 +1,5 @@
 # Flatorte - A WebCal server for courses at the Offenburg University
-# Copyright (C) 2021 Hannes Braun
+# Copyright (C) 2021-2022 Hannes Braun
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -24,11 +24,17 @@ def handle_request(context, cache, meta)
   Log.info { "Request: #{resource}" }
   if resource == "/"
     context.response.content_type = "text/plain"
-    context.response.print "Flatorte #{VERSION} // Copyright (C) 2021 Hannes Braun\n"
+    context.response.print "Flatorte #{VERSION} // Copyright (C) 2021-2022 Hannes Braun\n"
     context.response.print "This program comes with ABSOLUTELY NO WARRANTY.\n"
     context.response.print "This is free software, and you are welcome to redistribute it\n"
     context.response.print "under certain conditions.\n\n"
     context.response.print "This service is powered by TheCitadelofRicks (made by Jannik aka Seil0).\n"
+    return
+  end
+
+  if resource == "/health" || resource == "/health/"
+    # Health request
+    context.response.status = HTTP::Status::OK
     return
   end
 

@@ -1,5 +1,9 @@
 # Changelog
 
+1.1.0
+----------------------------------------
+* New health check endpoint introduced (`/health`)
+
 1.0.2
 ----------------------------------------
 * Fixed time offset issue
