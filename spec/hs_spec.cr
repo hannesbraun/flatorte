@@ -43,5 +43,9 @@ end
 describe "id_to_time" do
   it "works" do
     id_to_time(0, Faculty::EMI).should eq({8, 0})
+    id_to_time(1, Faculty::EMI).should eq({9, 45})
+    id_to_time(3, Faculty::EMI).should eq({14, 0})
+    id_to_time(4, Faculty::EMI).should eq({15, 45})
+    id_to_time(5, Faculty::EMI).should eq({17, 30})
   end
 end
