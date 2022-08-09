@@ -26,7 +26,7 @@ certbot certonly -a standalone -d cool.domain.ai
 
 Flatorte can be started without any arguments. Traffic won't be encrypted in this case.
 
-To specify the private key and the certificte chain, use the accourding parameters:
+To specify the private key and the certificate chain, use the according parameters:
 ```bash
 flatorte -k privkey.pem -c fullchain.pem
 ```
