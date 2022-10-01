@@ -8,7 +8,7 @@ RUN chown nobody:nogroup bin/flatorte
 FROM alpine:3
 
 COPY --from=builder /flatorte/bin/flatorte /flatorte
-RUN apk add --update --no-cache --force-overwrite libgcc pcre-dev
+RUN apk add --update --no-cache --force-overwrite libgcc pcre-dev tzdata
 
 USER nobody
 WORKDIR /
